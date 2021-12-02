@@ -1,5 +1,3 @@
-package day01
-
 import java.io.File
 
 /***
@@ -7,7 +5,7 @@ import java.io.File
  */
 private fun readMeasurements(): List<Int> {
     val measurements = mutableListOf<Int>()
-    File("src/day01/input.txt")
+    File("src/resources/inputs/day1.txt")
         .useLines { lines ->
             lines.forEach {
                 measurements.add(it.toInt())
