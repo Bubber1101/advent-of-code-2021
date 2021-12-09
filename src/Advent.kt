@@ -1,4 +1,5 @@
+import day5.Point
 
 fun main() {
-    println(day4.part2())
+    println(day5.part1())
 }
