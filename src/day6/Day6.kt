@@ -2,36 +2,34 @@ package day6
 
 import java.io.File
 
-val sums = mutableListOf<Int>()
+val sums = mutableListOf<Long>()
 
-fun part1(): Int {
-    val inputs = File("src/resources/inputs/day6_test.txt")
+fun getFishes(onDay: Int): Long {
+    val inputs = File("src/resources/inputs/day6.txt")
         .readLines()[0]
         .split(",")
-        .map { it.toInt() }
+        .map { it.toLong() }
 
-    sums.add(inputs.sum())
+    sums.add(inputs.count().toLong())
     var stepList = step(inputs)
 
-
-    for (i in 0..80) {
-        sums.add(stepList.sum())
+    //for filling out the sums list, later the more is done here the less recursive calls in the #get function
+    for (i in 2..50) {
+        sums.add(stepList.count().toLong())
         stepList = step(stepList)
     }
 
-    return day6.sums[80]
-
-
+    return get(onDay)
 }
 
-fun get(index: Int): Int {
+fun get(index: Int): Long {
     return sums.getOrElse(index) { get(index - 7) + get(index - 9) }
 }
 
-fun step(list: List<Int>): List<Int> {
-    val nextStep = mutableListOf<Int>()
+fun step(list: List<Long>): List<Long> {
+    val nextStep = mutableListOf<Long>()
     for (fish in list) {
-        if (fish == 0) {
+        if (fish == 0L) {
             nextStep.add(6)
             nextStep.add(8)
         } else nextStep.add(fish - 1)
