@@ -15,6 +15,24 @@ fun part1(): Int {
     return inputs.map { abs(it - median) }.sum()
 }
 
+fun part2(): Int {
+    val inputs = File("src/resources/inputs/day7.txt")
+        .readLines()[0]
+        .split(",")
+        .map { it.toInt() }
+
+    var mean = findMean(inputs).toInt()
+
+    return inputs.map { (0..abs(it - mean)).sum() }.sum()
+}
+
+
+//https://www.geeksforgeeks.org/program-for-mean-and-median-of-an-unsorted-array/ thx
+fun findMean(a: List<Int>): Double {
+    var sum = 0
+    for (element in a) sum += element
+    return sum.toDouble() / a.size.toDouble()
+}
 
 fun findMedian(a: List<Int>): Double {
     var a = a.sorted()
