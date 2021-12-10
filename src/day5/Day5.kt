@@ -2,20 +2,18 @@ package day5
 
 import java.io.File
 
-fun part1(): Int {
+fun part2(): Int {
     val inputs: List<String> = File("src/resources/inputs/day5.txt").readLines()
     val lines = getLines(inputs)
-    val points = mutableListOf<Point>()
-    var map = mutableMapOf<Point, Int>()
+    val map = mutableMapOf<Point, Int>()
     for (line in lines) {
         for (point in line.points) {
-            if (points.contains(point)) {
-                points[points.indexOf(point)].increment()
-            } else points.add(point)
-
+            if (map.containsKey(point)) {
+                map[point] = map[point]!! + 1
+            } else map[point] = 0
         }
     }
-    return points.count { it.count > 0 }
+    return map.count { it.value > 0 }
 }
 
 fun getLines(inputs: List<String>): List<Line> {
@@ -27,11 +25,11 @@ fun getLines(inputs: List<String>): List<Line> {
         }
         list += Line(points[0], points[1])
     }
-    return list;
+    return list
 }
 
 
-class Line(val a: Point, val b: Point) {
+class Line(a: Point, b: Point) {
     var points: List<Point> = getPoints(a, b)
 
     private fun getPoints(a: Point, b: Point): List<Point> {
@@ -40,38 +38,38 @@ class Line(val a: Point, val b: Point) {
         if (a.x == b.x) {
             var y = sortedSetOf(a.y, b.y)
             for (i in y.first()..y.last()) list.add(Point(a.x, i))
-
         } else if (a.y == b.y) {
             var x = sortedSetOf(a.x, b.x)
             for (i in x.first()..x.last()) list.add(Point(i, a.y))
+        } else {
+            list += getDiagonalPointsBetween(a, b)
         }
         return list
     }
 }
 
-data class Point(val x: Int, val y: Int, var count: Int = 0) {
-    fun increment() {
-        count++
+private fun getDiagonalPointsBetween(p1: Point, p2: Point): Set<Point> {
+    val list = listOf(p1, p2).sortedBy { it.x }
+    val points = mutableSetOf<Point>()
+    val a = list[0]
+    val b = list[1]
+
+    var x = a.x
+    var y = a.y
+    if (a.y > b.y) {
+        while (y >= b.y) {
+            points.add(Point(x, y))
+            y--
+            x++
+        }
+    } else {
+        while (y <= b.y) {
+            points.add(Point(x, y))
+            y++
+            x++
+        }
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Point
-
-        if (x != other.x) return false
-        if (y != other.y) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-
-        var result = x
-        result = 31 * result + y
-        return result
-    }
-
-
+    return points
 }
+
+data class Point(val x: Int, val y: Int)
