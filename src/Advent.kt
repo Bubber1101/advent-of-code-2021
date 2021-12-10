@@ -1,4 +1,4 @@
 
 fun main() {
-    println(day5.part2())
+    println(day6.getFishes(256))
 }
